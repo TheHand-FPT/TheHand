@@ -128,14 +128,13 @@ class MagicGestureScene(th.Scene):
         self._debug = True
         self.done = False
 
-    # helpers
     def _load_sound(self, rel: str):
         try:
-            parts = rel.split('/', 1)
+            parts = rel.split("/", 1)
             if len(parts) == 2:
                 p = th.asset_path(parts[0], parts[1])
             else:
-                p = th.asset_path('audio', rel)
+                p = th.asset_path("audio", rel)
             return pg.mixer.Sound(p)
         except Exception:
             return None
@@ -155,11 +154,10 @@ class MagicGestureScene(th.Scene):
         speed_multiplier = 1.0 * (1.1 ** int(elapsed // 60))
         self.current_fall_speed = self.base_fall_speed * speed_multiplier
 
-    # hand callback
     def _on_hand_result(self, result) -> None:
         if not result:
             return
-        hand_landmarks_list = getattr(result, 'hand_landmarks', None) or getattr(result, 'hand_world_landmarks', None)
+        hand_landmarks_list = getattr(result, "hand_landmarks", None) or getattr(result, "hand_world_landmarks", None)
         if not hand_landmarks_list:
             return
 
@@ -211,7 +209,6 @@ class MagicGestureScene(th.Scene):
                 except Exception:
                     pass
 
-    # Scene API
     def setup(self) -> None:
         self._start_time = time.time()
         self._last_spawn = time.time()
@@ -223,9 +220,7 @@ class MagicGestureScene(th.Scene):
 
     def handle_events(self) -> None:
         for event in self.state.events:
-            if event.type == pg.QUIT:
-                self.done = True
-            elif event.type == pg.KEYDOWN:
+            if event.type == pg.KEYDOWN:
                 if event.key == pg.K_1 and self.sprites:
                     self._on_sprite_matched(self.sprites[0])
                 elif event.key == pg.K_d:
@@ -236,9 +231,9 @@ class MagicGestureScene(th.Scene):
                 mx, my = event.pos
                 for name, rect in self._buttons.items():
                     if rect.collidepoint(mx, my):
-                        if name == 'continue':
+                        if name == "continue":
                             self.done = True
-                        elif name == 'restart':
+                        elif name == "restart":
                             self.setup()
 
     def update(self) -> None:
@@ -254,7 +249,7 @@ class MagicGestureScene(th.Scene):
                 self._spawn_sprite()
                 self._last_spawn = now
 
-        current_speed = getattr(self, 'current_fall_speed', self.base_fall_speed)
+        current_speed = getattr(self, "current_fall_speed", self.base_fall_speed)
         for sprite in list(self.sprites):
             sprite.rect.y += int(current_speed * dt)
             if sprite.rect.bottom >= self.ground_y:
@@ -317,86 +312,3 @@ class MagicGestureScene(th.Scene):
             tr = small.render("RESTART", True, (255, 255, 255))
             self.screen.blit(tt, tt.get_rect(center=rect_continue.center))
             self.screen.blit(tr, tr.get_rect(center=rect_restart.center))
-
-        pg.display.flip()
-import pygame as pg
-
-import thehand as th
-
-
-class MagicGestureScene(th.Scene):
-    def __init__(self, state: th.State, store: th.Store, name: str):
-        # Match Scene signature: (state, store, name)
-        super().__init__(state, store, name)
-
-        # Screen: prefer store.screen if available, else create a temporary surface
-        if getattr(self.store, "screen", None):
-            self.screen = self.store.screen
-        else:
-            self.screen = pg.display.get_surface() or pg.Surface(self.state.window_size)
-
-        # Light-weight background: try to load, otherwise solid fill
-        bg_path = th.asset_path("imgs", "mgs_background.jpg")
-        try:
-            self.bg_img = pg.image.load(bg_path).convert()
-            self.bg_img = pg.transform.scale(self.bg_img, self.screen.get_size())
-        except Exception:
-            # Keep a very lightweight fallback
-            self.bg_img = pg.Surface(self.screen.get_size())
-            self.bg_img.fill((30, 30, 46))  # dark base fallback
-
-        # Choose ground Y simply near bottom to avoid heavy pixel scans
-        self.ground_y = self.screen.get_height() - int(self.screen.get_height() * 0.05)
-
-        # Load main character (light processing): use colorkey for transparency if needed
-        char_path = th.asset_path("imgs", "mgs_main_character.png")
-        try:
-            char_img = pg.image.load(char_path).convert_alpha()
-            # Remove near-black pixels (rgb <5) by setting alpha=0 where supported.
-            # This is faster than per-pixel blits for moderate-sized images.
-            try:
-                arr = pg.surfarray.pixels3d(char_img)
-                alpha = pg.surfarray.pixels_alpha(char_img)
-                mask = (arr[:, :, 0] < 5) & (arr[:, :, 1] < 5) & (arr[:, :, 2] < 5)
-                alpha[mask] = 0
-                del arr, alpha
-            except Exception:
-                # Fallback to colorkey if surfarray access isn't available
-                try:
-                    char_img.set_colorkey((0, 0, 0))
-                except Exception:
-                    pass
-
-            char_w = int(self.screen.get_width() * 0.10)
-            scale_h = int(char_img.get_height() * (char_w / max(1, char_img.get_width())))
-            self.char_img = pg.transform.smoothscale(char_img, (char_w, scale_h))
-            self.char_rect = self.char_img.get_rect()
-            self.char_rect.centerx = self.screen.get_width() // 2
-            self.char_rect.bottom = self.ground_y - (self.char_img.get_height() * 0.65)
-        except Exception:
-            # Minimal fallback (small square)
-            self.char_img = pg.Surface((50, 50), pg.SRCALPHA)
-            self.char_img.fill((255, 0, 0, 180))
-            self.char_rect = self.char_img.get_rect(centerx=self.screen.get_width() // 2, bottom=self.ground_y)
-
-        # Running flag for test harness
-        self.done = False
-
-    def setup(self) -> None:
-        # no heavy setup required
-        return None
-
-    def handle_events(self) -> None:
-        for event in self.state.events:
-            if event.type == pg.QUIT:
-                self.done = True
-
-    def update(self) -> None:
-        # lightweight update placeholder (no heavy computations)
-        return None
-
-    def render(self) -> None:
-        self.screen.blit(self.bg_img, (0, 0))
-        self.screen.blit(self.char_img, self.char_rect)
-        # keep flip so the example/test shows output when run standalone
-        pg.display.flip()
