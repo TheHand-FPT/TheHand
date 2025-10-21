@@ -4,7 +4,16 @@ import pygame as pg
 
 import thehand as th
 from thehand.game.configs import GAME_NAME
-from thehand.game.scenes import CreditScene, HintScene, MainMenuScene, MlrsScene, PacmanScene, RPSScene, SplashScene
+from thehand.game.scenes import (
+    CreditScene,
+    HintScene,
+    MainMenuScene,
+    MlrsScene,
+    PacmanScene,
+    RPSScene,
+    SplashScene,
+)
+from thehand.game.scenes.level import MagicGestureScene
 
 
 class TheHandGame:
@@ -78,6 +87,10 @@ class TheHandGame:
         exit(0)
 
     def _create_and_add_scenes(self) -> None:
+        # Magic gesture scene should run first
+        self.magic_scene = MagicGestureScene(self.state, self.store, "magic_gesture")
+        self.scene_manager += self.magic_scene
+
         self.splash_scene = SplashScene(self.state, self.store, "splash")
         self.scene_manager += self.splash_scene
 
@@ -119,11 +132,13 @@ class TheHandGame:
     def _setup_scenes(self) -> None:
         self._create_and_add_scenes()
 
+        # chain existing scenes as before
         self.splash_scene >> self.main_menu_scene >> self.hint_pacman_scene
         self.hint_pacman_scene >> self.pacman_scene >> self.hint_mlrs_scene
         self.hint_mlrs_scene >> self.mlrs_scene >> self.credit_scene
 
-        self.scene_manager << self.mlrs_scene
+        # set initial scene to magic gesture
+        self.scene_manager << self.magic_scene
 
     def _sr_callback(self, text: str) -> None:
         th.print_inline(text)

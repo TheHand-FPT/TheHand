@@ -82,7 +82,7 @@ class MagicGestureScene(th.Scene):
 
         # Gameplay parameters
         self.spawn_per_second = 0.5
-        self.base_fall_speed = 50.0
+        self.base_fall_speed = 300.0
         self.max_sprites = 6
         self.lives = 5
         self.score = 0
