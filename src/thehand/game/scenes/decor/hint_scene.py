@@ -16,7 +16,7 @@ class HintScene(th.Scene):
         state: th.State,
         store: th.Store,
         background_path: Optional[str] = None,
-        hint_text: str = "HINT",
+        hint_text: str = "Hãy sử dụng tay của bạn để di chuyển",
         text_color: Tuple[int, int, int] = (240, 240, 240),
         align: str = "left",
     ) -> None:
