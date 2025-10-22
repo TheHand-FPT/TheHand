@@ -56,18 +56,7 @@ class MagicGestureScene(th.Scene):
         char_path = th.asset_path("imgs", "mgs_main_character.png")
         try:
             char_img = pg.image.load(char_path).convert_alpha()
-            # try to remove near-black pixels (fast); fallback to colorkey
-            try:
-                arr = pg.surfarray.pixels3d(char_img)
-                alpha = pg.surfarray.pixels_alpha(char_img)
-                mask = (arr[:, :, 0] < 5) & (arr[:, :, 1] < 5) & (arr[:, :, 2] < 5)
-                alpha[mask] = 0
-                del arr, alpha
-            except Exception:
-                try:
-                    char_img.set_colorkey((0, 0, 0))
-                except Exception:
-                    pass
+            # The character image already has no background; keep it simple and fast
             cw = int(self.screen.get_width() * 0.10)
             ch = int(char_img.get_height() * (cw / max(1, char_img.get_width())))
             self.char_img = pg.transform.smoothscale(char_img, (cw, ch))
@@ -77,12 +66,12 @@ class MagicGestureScene(th.Scene):
 
         self.char_rect = self.char_img.get_rect(centerx=self.screen.get_width() // 2)
         # Ground y defined relative to character bottom
-        self.ground_y = self.screen.get_height() - int(self.char_img.get_height() * 0.5)
+        self.ground_y = self.screen.get_height() - int(self.char_img.get_height() * 0.9)
         self.char_rect.bottom = self.ground_y
 
         # Gameplay parameters
         self.spawn_per_second = 0.5
-        self.base_fall_speed = 300.0
+        self.base_fall_speed = 200.0
         self.max_sprites = 6
         self.lives = 5
         self.score = 0
@@ -136,6 +125,8 @@ class MagicGestureScene(th.Scene):
             return None
 
     def _spawn_sprite(self):
+        if self._game_over:
+            return
         if not self.gesture_images or len(self.sprites) >= self.max_sprites:
             return
         key, img = random.choice(self.gesture_images)
@@ -145,12 +136,14 @@ class MagicGestureScene(th.Scene):
         self.sprites.append(sprite)
 
     def _increase_difficulty(self, elapsed: float):
-        extra = int(elapsed // 120)
+        extra = int(elapsed // 30)
         self.spawn_per_second = 0.5 + extra * 1.0
-        speed_multiplier = 1.0 * (1.1 ** int(elapsed // 60))
+        speed_multiplier = 1.0 * (1.1 ** int(elapsed // 10))
         self.current_fall_speed = self.base_fall_speed * speed_multiplier
 
     def _on_hand_result(self, result) -> None:
+        if self._game_over:
+            return
         if not result:
             return
         hand_landmarks_list = getattr(result, "hand_landmarks", None) or getattr(result, "hand_world_landmarks", None)
@@ -188,7 +181,8 @@ class MagicGestureScene(th.Scene):
             self.sprites.remove(sprite)
         except ValueError:
             pass
-        self.lives -= 1
+        # Decrease lives but don't go below zero
+        self.lives = max(0, self.lives - 1)
         self._red_flash_timer = 0.1
         self._shake_timer = 0.1
         if self.lives <= 0:
@@ -198,6 +192,12 @@ class MagicGestureScene(th.Scene):
                 except Exception:
                     pass
             self._game_over = True
+            # freeze vision input for this scene and unregister callback
+            try:
+                self.state.set_scene_hand_callback(None)
+            except Exception:
+                pass
+            self.state.hand_running = False
         else:
             if self.sound_hit:
                 try:
@@ -242,6 +242,10 @@ class MagicGestureScene(th.Scene):
         self._last_update = now
         elapsed = now - self._start_time
         self._increase_difficulty(elapsed)
+
+        # If game over, freeze gameplay (no spawn, no movement)
+        if self._game_over:
+            return
 
         if self.spawn_per_second > 0:
             interval = 1.0 / max(0.001, self.spawn_per_second)
