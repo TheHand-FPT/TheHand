@@ -74,7 +74,11 @@ class SpeechRecognition:
         self._stream.start()
         self.state.sr_running = True
 
-        while self.state.sr_running:
+        while True:
+            if not self.state.sr_running:
+                time.sleep(0.2)
+                continue
+
             chunk, status = self._q_data.get()
             if status:
                 print(status)

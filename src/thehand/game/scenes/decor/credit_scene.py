@@ -12,9 +12,11 @@ class CreditScene(th.Scene):
         self.text_color = (255, 255, 255)
 
         self.lines = [
-            "CREDITS",
+            "Congratulations! You have completed the game!",
             "",
-            "A product by TheHand Corporation",
+            "Thank you for playing the game!",
+            "",
+            "[GAME NO NAME] - A product by TheHand Corporation",
             "",
             "Nguyễn Thế Anh",
             "Trần Đức Thịnh",
@@ -23,10 +25,9 @@ class CreditScene(th.Scene):
             "Đinh Duy Khương",
             "",
             "",
-            "Thank you for playing the game!",
-            "",
             "Press ESC or SPACE to exit",
         ]
+        self.store.sounds["wow_congrat"].play()
 
     def handle_events(self):
         for event in self.state.events:

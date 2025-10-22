@@ -7,13 +7,13 @@ from thehand.game.configs import GAME_NAME
 from thehand.game.scenes import (
     CreditScene,
     HintScene,
+    MagicGestureScene,
     MainMenuScene,
     MlrsScene,
     PacmanScene,
-    RPSScene,
+    RpsScene,
     SplashScene,
 )
-from thehand.game.scenes.level import MagicGestureScene
 
 
 class TheHandGame:
@@ -123,7 +123,30 @@ class TheHandGame:
         self.mlrs_scene = MlrsScene(self.state, self.store, "mlrs")
         self.scene_manager += self.mlrs_scene
 
-        self.rps_scene = RPSScene(self.state, self.store, "rps")
+        self.hint_magic_scene = HintScene(
+            self.state,
+            self.store,
+            "hint_magic",
+            self.store.imgs["majik"],
+            self.store.sounds["magic_spells"],
+            "The true magic is your hand.",
+        )
+        self.scene_manager += self.hint_magic_scene
+
+        self.magic_scene = MagicGestureScene(self.state, self.store, "magic")
+        self.scene_manager += self.magic_scene
+
+        self.hint_rps_scene = HintScene(
+            self.state,
+            self.store,
+            "hint_rps",
+            self.store.imgs["rps"],
+            self.store.sounds["error"],
+            "",
+        )
+        self.scene_manager += self.hint_rps_scene
+
+        self.rps_scene = RpsScene(self.state, self.store, "rps")
         self.scene_manager += self.rps_scene
 
         self.credit_scene = CreditScene(self.state, self.store, "credit")
@@ -133,12 +156,22 @@ class TheHandGame:
         self._create_and_add_scenes()
 
         # chain existing scenes as before
-        self.splash_scene >> self.main_menu_scene >> self.hint_pacman_scene
-        self.hint_pacman_scene >> self.pacman_scene >> self.hint_mlrs_scene
-        self.hint_mlrs_scene >> self.mlrs_scene >> self.credit_scene
+        (
+            self.splash_scene
+            >> self.main_menu_scene
+            >> self.hint_pacman_scene
+            >> self.pacman_scene
+            >> self.hint_mlrs_scene
+            >> self.mlrs_scene
+            >> self.hint_magic_scene
+            >> self.magic_scene
+            >> self.hint_rps_scene
+            >> self.rps_scene
+            >> self.credit_scene
+        )
 
         # set initial scene to magic gesture
-        self.scene_manager << self.magic_scene
+        self.scene_manager << self.splash_scene
 
     def _sr_callback(self, text: str) -> None:
         th.print_inline(text)

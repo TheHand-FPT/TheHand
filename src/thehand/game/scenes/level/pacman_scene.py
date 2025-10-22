@@ -157,14 +157,14 @@ class PacmanScene(th.Scene):
         super().__init__(state, store, name)
 
         self.pacman_images = {
-            "right": pg.image.load(th.asset_path("imgs", "pacman_right.png")).convert_alpha(),
-            "left": pg.image.load(th.asset_path("imgs", "pacman_left.png")).convert_alpha(),
-            "up": pg.image.load(th.asset_path("imgs", "pacman_up.png")).convert_alpha(),
-            "down": pg.image.load(th.asset_path("imgs", "pacman_down.png")).convert_alpha(),
-            "close_right": pg.image.load(th.asset_path("imgs", "pacman_close_right.png")).convert_alpha(),
-            "close_left": pg.image.load(th.asset_path("imgs", "pacman_close_left.png")).convert_alpha(),
-            "close_up": pg.image.load(th.asset_path("imgs", "pacman_close_up.png")).convert_alpha(),
-            "close_down": pg.image.load(th.asset_path("imgs", "pacman_close_down.png")).convert_alpha(),
+            "right": self.store.imgs["pacman_right"].convert_alpha(),
+            "left": self.store.imgs["pacman_left"].convert_alpha(),
+            "up": self.store.imgs["pacman_up"].convert_alpha(),
+            "down": self.store.imgs["pacman_down"].convert_alpha(),
+            "close_right": self.store.imgs["pacman_close_right"].convert_alpha(),
+            "close_left": self.store.imgs["pacman_close_left"].convert_alpha(),
+            "close_up": self.store.imgs["pacman_close_up"].convert_alpha(),
+            "close_down": self.store.imgs["pacman_close_down"].convert_alpha(),
         }
         for key, img in self.pacman_images.items():
             self.pacman_images[key] = pg.transform.scale(img, (70, 70))
@@ -189,6 +189,10 @@ class PacmanScene(th.Scene):
         self.eat_0_buffer = None
         self.eat_1_buffer = None
         self.eat_2_buffer = None
+        self.ambient_buffer = None
+
+        self._win = False
+        self._win_timer = 0
 
     def setup(self):
         self.state.hand_running = True
@@ -203,7 +207,16 @@ class PacmanScene(th.Scene):
 
     def update(self):
         if self.score > 10000:
+            if not self._win:
+                self._win_timer = self.state.now
+            self._win = True
+            if self.state.now - self._win_timer > 5000:
+                pg.event.post(th.create_next_scene_event())
             return
+
+        if not self.ambient_buffer or not self.ambient_buffer.get_busy():
+            self.store.sounds["pacman_theme"].set_volume(0.3)
+            self.ambient_buffer = self.store.sounds["pacman_theme"].play()
 
         velocity = pg.Vector2(
             (self.pacman_target_pos.x - self.pacman_pos.x),
@@ -278,7 +291,7 @@ class PacmanScene(th.Scene):
         for toast in self.toasts:
             toast.render()
 
-        if self.score > 10000:
+        if self._win:
             board_size = (self.state.window_size[0] / 2, self.state.window_size[1] / 2)
             board = pg.Surface(board_size, pg.SRCALPHA)
             board.fill((0, 0, 0, 178))

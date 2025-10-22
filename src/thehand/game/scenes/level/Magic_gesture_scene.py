@@ -120,10 +120,6 @@ class MagicGestureScene(th.Scene):
         self._game_over = False
         self._buttons = {}
 
-        # register to receive hand callbacks for scene
-        self.state.set_scene_hand_callback(self._on_hand_result)
-        self.state.hand_running = True
-
         # debug
         self._debug = True
         self.done = False
@@ -210,6 +206,10 @@ class MagicGestureScene(th.Scene):
                     pass
 
     def setup(self) -> None:
+        # register to receive hand callbacks for scene
+        self.state.set_scene_hand_callback(self._on_hand_result)
+        self.state.hand_running = True
+
         self._start_time = time.time()
         self._last_spawn = time.time()
         self._last_update = time.time()

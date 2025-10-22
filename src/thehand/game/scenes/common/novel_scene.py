@@ -108,4 +108,8 @@ class NovelScene(th.Scene):
         self.state.set_scene_sr_callback(self.pages[index].sr_callback)
 
     def next_page(self):
+        pre_page_index = self.current_page_index
         self.set_current_page(self.current_page_index + 1)
+
+        if pre_page_index == self.current_page_index:
+            pg.event.post(th.create_next_scene_event())

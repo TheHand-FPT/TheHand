@@ -5,6 +5,7 @@ import pygame as pg
 from PIL import Image
 
 import thehand as th
+from thehand.game.configs import GAME_NAME
 
 
 class MainMenuScene(th.Scene):
@@ -17,7 +18,7 @@ class MainMenuScene(th.Scene):
         self.bg_frame_delay = 100
 
         try:
-            gif_path = th.asset_path("imgs", "menu_background.gif")
+            gif_path = th.asset_path("imgs", "night_star.gif")
             pil_img = Image.open(gif_path)
             for frame in range(0, pil_img.n_frames):
                 pil_img.seek(frame)
@@ -28,6 +29,11 @@ class MainMenuScene(th.Scene):
                 self.bg_frames.append(pg_img)
         except Exception:
             self.bg_frames = []
+
+        self.game_name = self.store.font_pixel_36.render(GAME_NAME, True, th.COLOR_MOCHA_TEXT)
+        self.game_name_rect = self.game_name.get_rect(
+            center=(self.state.window_size[0] // 2, self.state.window_size[1] * 0.3)
+        )
 
         # Button setup
         self.button_font = self.store.font_pixel_36
@@ -77,13 +83,15 @@ class MainMenuScene(th.Scene):
         else:
             self.store.screen.fill((25, 25, 25))
 
+        self.store.screen.blit(self.game_name, self.game_name_rect)
+
         self._draw_button(self.start_btn_rect, "START", active=(self.active_btn == "start"))
 
         self._draw_button(self.quit_btn_rect, "QUIT", active=(self.active_btn == "quit"))
 
         # Draw last spoken text as subtitle
         if self.last_spoken:
-            subtitle_surf = self.store.font_text_32.render(self.last_spoken, True, (255, 255, 0))
+            subtitle_surf = self.store.font_text_32.render(self.last_spoken, True, th.COLOR_MOCHA_TEXT)
             subtitle_rect = subtitle_surf.get_rect(
                 center=(
                     self.store.screen.get_width() // 2,

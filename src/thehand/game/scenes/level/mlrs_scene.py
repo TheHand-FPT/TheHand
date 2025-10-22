@@ -74,7 +74,7 @@ class MlrsScene(NovelScene):
                 "wait",
                 self._fire_callback,
                 store.imgs["mlrs_00"],
-                'Nói đi. Nói "Firrreeee!!!" ý.',
+                'Sir, we are waiting for your command "Firrreeee!!!"',
                 infinity=True,
             ),
             Page(
@@ -111,10 +111,11 @@ class MlrsScene(NovelScene):
     def handle_events(self):
         super().handle_events()
 
-        for event in self.state.events:
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.next_page()
+        if self.state.debug_mode:
+            for event in self.state.events:
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE:
+                        self.next_page()
 
     def update(self):
         super().update()
@@ -128,9 +129,9 @@ class MlrsScene(NovelScene):
             if speech_volume > 0.04:
                 self.next_page()
             else:
-                self.pages[self.current_page_index].text = "Nói nhỏ quá..."
+                self.pages[self.current_page_index].text = "...too weak :<"
         elif text:
-            self.pages[self.current_page_index].text = "." * random.randrange(3, 9)
+            self.pages[self.current_page_index].text = th.generate_noise_string(random.randrange(3, 16))
 
     def _sr_callback(self, text: str):
         th.print_inline(text)

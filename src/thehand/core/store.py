@@ -97,6 +97,7 @@ class Store:
 
         self.imgs: dict[str, pg.Surface] = {
             "flying_comets": pg.image.load(asset_path("imgs", "flying_comets.jpg")),
+            "majik": pg.image.load(asset_path("imgs", "majik.jpg")),
             "mlrs_00": pg.image.load(asset_path("imgs", "mlrs_00.jpg")),
             "mlrs_01": pg.image.load(asset_path("imgs", "mlrs_01.jpg")),
             "pacman_bg_gray": pg.image.load(asset_path("imgs", "pacman_bg_gray.jpg")),
@@ -112,6 +113,7 @@ class Store:
             "tutorial_02_01": pg.image.load(asset_path("imgs", "tutorial_02_01.jpg")),
             "tutorial_02_02": pg.image.load(asset_path("imgs", "tutorial_02_02.jpg")),
             "apple": pg.image.load(asset_path("imgs", "apple.png")),
+            "fair_icon": pg.image.load(asset_path("imgs", "fair_icon.png")),
             "ghost_blinky": pg.image.load(asset_path("imgs", "ghost_blinky.png")),
             "ghost_blue": pg.image.load(asset_path("imgs", "ghost_blue.png")),
             "ghost_clyde": pg.image.load(asset_path("imgs", "ghost_clyde.png")),
@@ -125,6 +127,10 @@ class Store:
             "pacman_left": pg.image.load(asset_path("imgs", "pacman_left.png")),
             "pacman_right": pg.image.load(asset_path("imgs", "pacman_right.png")),
             "pacman_up": pg.image.load(asset_path("imgs", "pacman_up.png")),
+            "paper": pg.image.load(asset_path("imgs", "paper.png")),
+            "rock": pg.image.load(asset_path("imgs", "rock.png")),
+            "rps": pg.image.load(asset_path("imgs", "rps.png")),
+            "scissor": pg.image.load(asset_path("imgs", "scissor.png")),
             "strawberry": pg.image.load(asset_path("imgs", "strawberry.png")),
             "thehand_icon": pg.image.load(asset_path("imgs", "thehand_icon.png")),
             "thehand": pg.image.load(asset_path("imgs", "thehand.png")),
@@ -142,6 +148,8 @@ class Store:
             "gta_v_death": pg.mixer.Sound(asset_path("audio", "gta_v_death.mp3")),
             "gun": pg.mixer.Sound(asset_path("audio", "gun.mp3")),
             "heavy_eating": pg.mixer.Sound(asset_path("audio", "heavy_eating.mp3")),
+            "loading": pg.mixer.Sound(asset_path("audio", "loading.mp3")),
+            "magic_spells": pg.mixer.Sound(asset_path("audio", "magic_spells.mp3")),
             "mlrs_00_welcome": pg.mixer.Sound(asset_path("audio", "mlrs_00_welcome.mp3")),
             "mlrs_01_defeated": pg.mixer.Sound(asset_path("audio", "mlrs_01_defeated.mp3")),
             "mlrs_02_rocket": pg.mixer.Sound(asset_path("audio", "mlrs_02_rocket.mp3")),
@@ -158,5 +166,7 @@ class Store:
             "spiderman": pg.mixer.Sound(asset_path("audio", "spiderman_meme_song.mp3")),
             "tf_nemesis": pg.mixer.Sound(asset_path("audio", "tf_nemesis.mp3")),
             "vine_boom": pg.mixer.Sound(asset_path("audio", "vine_boom.mp3")),
+            "windows_error_remix": pg.mixer.Sound(asset_path("audio", "windows_error_remix.mp3")),
             "windows_xp_startup": pg.mixer.Sound(asset_path("audio", "windows_xp_startup.mp3")),
+            "wow_congrat": pg.mixer.Sound(asset_path("audio", "wow_congrat.mp3")),
         }
