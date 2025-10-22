@@ -1,8 +1,8 @@
-# \[GAME_NO_NAME\] (TheHand Project)
+# \[GAME_NOT_FOUND\!\] (TheHand Project)
 
 ## Project Introduction
 
-**\[GAME_NO_NAME\]** is an action and fighting 2D Platformer game made by the **TheHand** team. The core idea is simple: **You don't need a keyboard or mouse\!** You control the character using only your **body movements, voice, and face expressions.** This creates a super fun and healthy way to play, turning your real-life actions into game moves.
+**\[GAME_NOT_FOUND\!\]** is an action and fighting 2D Platformer game made by the **TheHand** team. The core idea is simple: **You don't need a keyboard or mouse\!** You control the character using only your **body movements, voice, and face expressions.** This creates a super fun and healthy way to play, turning your real-life actions into game moves.
 
 ## Core Concept: Natural Reaction
 
@@ -28,14 +28,14 @@ To make this unique control system work, the project uses specialized Machine Le
 ## Development Team (TheHand)
 
 | Name            | Student ID |
-|:----------------|:-----------|
+| :-------------- | :--------- |
 | Trần Đức Thịnh  | HE201309   |
 | Châm Duy Khoát  | HE204140   |
 | Nguyễn Thế Anh  | HE204320   |
 | Đinh Duy Khương | HE200217   |
 | Hoàng Minh Nhất | HE205173   |
 
-**\[GAME_NO_NAME\] \- Where keyboards and mice are meaningless.**
+**\[GAME_NOT_FOUND\!\] \- Where keyboards and mice are meaningless.**
 
 ## For Devs
 
