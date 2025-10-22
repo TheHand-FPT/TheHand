@@ -1,4 +1,4 @@
-from thehand import TheHandGame
+from thehand.game import TheHandGame
 
 
 def main():

@@ -7,13 +7,13 @@ from thehand.core.store import Store
 class Scene(ABC):
     def __init__(
         self,
-        name: str,
         state: State,
         store: Store,
+        name: str,
     ) -> None:
-        self.name = name
         self.state = state
         self.store = store
+        self.name = name
 
         self.next_scene: str = ""
 

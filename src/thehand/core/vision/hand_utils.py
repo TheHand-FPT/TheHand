@@ -24,6 +24,16 @@ def get_hand_position_on_screen(
     return None
 
 
+def is_hand_palm(landmarks: list[Landmark]) -> bool:
+    return (
+        is_thumb_open(landmarks)
+        and is_index_open(landmarks)
+        and is_middle_open(landmarks)
+        and is_ring_open(landmarks)
+        and is_pinky_open(landmarks)
+    )
+
+
 def is_hand_like(landmarks: list[Landmark]) -> bool:
     return (
         is_hand_horizontal(landmarks)
@@ -48,7 +58,7 @@ def is_hand_dislike(landmarks: list[Landmark]) -> bool:
     )
 
 
-def is_hand_index(landmarks: list[Landmark]) -> bool:
+def is_hand_point(landmarks: list[Landmark]) -> bool:
     return (
         is_hand_vertical_up(landmarks)
         and not is_thumb_open(landmarks)
@@ -59,13 +69,46 @@ def is_hand_index(landmarks: list[Landmark]) -> bool:
     )
 
 
-def is_hand_peace(landmarks: list[Landmark]) -> bool:
+def is_hand_fuck(landmarks: list[Landmark]) -> bool:
+    return (
+        is_hand_vertical_up(landmarks)
+        and not is_thumb_open(landmarks)
+        and is_index_close(landmarks)
+        and is_middle_open(landmarks)
+        and is_ring_close(landmarks)
+        and is_pinky_close(landmarks)
+    )
+
+
+def is_hand_index(landmarks: list[Landmark]) -> bool:
+    return (
+        is_hand_vertical_up(landmarks)
+        and is_thumb_open(landmarks)
+        and is_index_open(landmarks)
+        and is_middle_close(landmarks)
+        and is_ring_close(landmarks)
+        and is_pinky_close(landmarks)
+    )
+
+
+def is_hand_v(landmarks: list[Landmark]) -> bool:
     return (
         is_hand_vertical_up(landmarks)
         and not is_thumb_open(landmarks)
         and is_index_open(landmarks)
         and is_middle_open(landmarks)
         and is_ring_close(landmarks)
+        and is_pinky_close(landmarks)
+    )
+
+
+def is_hand_three(landmarks: list[Landmark]) -> bool:
+    return (
+        is_hand_vertical_up(landmarks)
+        and not is_thumb_open(landmarks)
+        and is_index_open(landmarks)
+        and is_middle_open(landmarks)
+        and is_ring_open(landmarks)
         and is_pinky_close(landmarks)
     )
 
@@ -104,6 +147,16 @@ def is_hand_spider(landmarks: list[Landmark]) -> bool:
     )
 
 
+def is_hand_promise(landmarks: list[Landmark]) -> bool:
+    return (
+        not is_thumb_open(landmarks)
+        and is_index_close(landmarks)
+        and is_middle_close(landmarks)
+        and is_ring_close(landmarks)
+        and is_pinky_open(landmarks)
+    )
+
+
 def is_hand_call(landmarks: list[Landmark]) -> bool:
     return (
         is_thumb_open(landmarks)
@@ -123,6 +176,18 @@ def is_hand_v_capture(landmarks: list[Landmark]) -> bool:
         and is_middle_close(landmarks)
         and is_ring_close(landmarks)
         and is_pinky_close(landmarks)
+    )
+
+
+def is_hand_ok(landmarks: list[Landmark]) -> bool:
+    distance_4_8 = calculate_distance(landmarks[4], landmarks[8])
+    distance_3_4 = calculate_distance(landmarks[3], landmarks[4])
+
+    return (
+        distance_4_8 < distance_3_4 * 1.3
+        and is_middle_open(landmarks)
+        and is_ring_open(landmarks)
+        and is_pinky_open(landmarks)
     )
 
 

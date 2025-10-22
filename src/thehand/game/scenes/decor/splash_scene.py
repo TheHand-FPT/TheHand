@@ -6,12 +6,12 @@ import thehand as th
 class SplashScene(th.Scene):
     def __init__(
         self,
-        name: str,
         state: th.State,
         store: th.Store,
+        name: str,
         icon_ratio: float = 0.3,
     ):
-        super().__init__(name, state, store)
+        super().__init__(state, store, name)
 
         self.image = None
         self.image_rect = None
@@ -27,7 +27,8 @@ class SplashScene(th.Scene):
         self.start_time = pg.time.get_ticks()
 
     def setup(self):
-        original_image = pg.image.load(th.asset_path("imgs", "thehand_icon.png")).convert_alpha()
+        self.store.sounds["windows_xp_startup"].play()
+        original_image = self.store.imgs["thehand_icon"].convert_alpha()
         new_height = self.store.screen.get_height() * self.icon_ratio
         aspect_ratio = original_image.get_width() / original_image.get_height()
         new_width = new_height * aspect_ratio

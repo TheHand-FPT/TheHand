@@ -8,10 +8,8 @@ import thehand as th
 
 
 class MainMenuScene(th.Scene):
-    def __init__(self, name: str, state: th.State, store: th.Store, sr: th.SpeechRecognition):
-        super().__init__(name, state, store)
-
-        self.sr = sr
+    def __init__(self, state: th.State, store: th.Store, name: str):
+        super().__init__(state, store, name)
 
         self.bg_frames = []
         self.bg_frame_idx = 0
@@ -49,8 +47,7 @@ class MainMenuScene(th.Scene):
         self._start_button_pressed = False
 
     def setup(self):
-        self.sr.set_result_callback(self._sr_result_callback)
-        return
+        self.state.set_scene_sr_callback(self._sr_callback)
 
     def handle_events(self):
         for event in self.state.events:
@@ -95,14 +92,17 @@ class MainMenuScene(th.Scene):
             )
             self.store.screen.blit(subtitle_surf, subtitle_rect)
 
-    def _sr_result_callback(self, text):
-        if text:
-            self.last_spoken = text
-            t = text.lower()
-            if "start" in t:
-                self._press_start_button()
-            elif "quit" in t:
-                self._press_quit_button()
+    def _sr_callback(self, text):
+        if not text:
+            return
+
+        self.last_spoken = text
+        t = text.lower()
+
+        if "start" in t:
+            self._press_start_button()
+        elif "quit" in t:
+            self._press_quit_button()
 
     def _draw_button(self, rect, text, active=False):
         bg_color = th.COLOR_MOCHA_TEXT
@@ -116,7 +116,6 @@ class MainMenuScene(th.Scene):
                 th.COLOR_MOCHA_TEXT,
             )
             rect = rect.copy()
-            rect.y += 5
 
         pg.draw.rect(self.store.screen, bg_color, rect)
         pg.draw.rect(self.store.screen, border_color, rect, 4)
@@ -130,21 +129,30 @@ class MainMenuScene(th.Scene):
         self.active_btn = btn_name
         self.active_btn_time = pg.time.get_ticks()
 
-    def _delayed_start(self):
-        def set_done():
+    def _delayed_next_scene(self):
+        def next_scene():
             time.sleep(1)
             pg.event.post(th.create_next_scene_event())
 
-        Thread(target=set_done, daemon=True).start()
+        Thread(target=next_scene, daemon=True).start()
+
+    def _delayed_quit(self):
+        def quit():
+            time.sleep(1.5)
+            pg.event.post(th.create_quit_event())
+
+        Thread(target=quit, daemon=True).start()
 
     def _press_start_button(self):
         if self._start_button_pressed:
             return
 
+        self.store.sounds["button_launch"].play()
         self._start_button_pressed = True
         self._activate_button("start")
-        self._delayed_start()
+        self._delayed_next_scene()
 
     def _press_quit_button(self):
+        self.store.sounds["green_screen"].play()
         self._activate_button("quit")
-        pg.event.post(th.create_quit_event())
+        self._delayed_quit()

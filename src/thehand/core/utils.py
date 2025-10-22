@@ -1,7 +1,7 @@
 import os
 import random
 
-NOISE_CHARS = "#@$%█▓▒░■—–︱●○◆▪…?|aeiou"
+NOISE_CHARS = "#@$%_-+=:./|~^aeiou[]"
 
 
 def asset_path(category: str, filename: str) -> str:

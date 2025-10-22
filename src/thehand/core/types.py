@@ -14,3 +14,4 @@ type PoseResultCallback = Callable[[PoseLandmarkerResult], None]
 class TheHandEventData(TypedDict):
     code: int
     value: Any
+    seed: int

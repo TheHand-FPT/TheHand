@@ -27,8 +27,11 @@ def result_callback(result: HandLandmarkerResult):
                 if len(landmarks) < 21:
                     continue
 
-                pos = th.get_hand_position_on_screen(result.hand_landmarks[i], 1980, 1080)
-                print(pos)
+                # pos = th.get_hand_position_on_screen(result.hand_landmarks[i], 1980, 1080)
+                # print(pos)
+
+                res = th.is_hand_three(landmarks)
+                print(res)
 
 
 def draw(rgb_image, detection_result):
@@ -76,8 +79,11 @@ def draw(rgb_image, detection_result):
 
 
 def main():
+    state = th.State()
+    state.hand_callback = result_callback
+
     camera = th.Camera()
-    hand = th.HandLandmarker(result_callback)
+    hand = th.HandLandmarker(state)
 
     while True:
         image = camera.read()

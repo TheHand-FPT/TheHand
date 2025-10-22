@@ -7,7 +7,6 @@ from silero_vad import VADIterator, load_silero_vad
 from sounddevice import InputStream
 
 from thehand.core.state import State
-from thehand.core.types import SrResultCallback
 
 DEFAULT_MODEL = "moonshine/tiny"
 SAMPLING_RATE = 16000
@@ -32,9 +31,8 @@ class Transcriber:
 
 
 class SpeechRecognition:
-    def __init__(self, state: State, result_callback: SrResultCallback | None = None) -> None:
-        self._state = state
-        self._result_callback = result_callback
+    def __init__(self, state: State) -> None:
+        self.state = state
 
         self._model = DEFAULT_MODEL
 
@@ -66,9 +64,6 @@ class SpeechRecognition:
         self._speech = np.empty(0, dtype=np.float32)
         self._start_time: float = 0
 
-    def set_result_callback(self, callback: SrResultCallback) -> None:
-        self._result_callback = callback
-
     def get_speech_volume(self) -> float:
         if len(self._speech) == 0:
             return 0.0
@@ -77,13 +72,9 @@ class SpeechRecognition:
     def run(self) -> None:
         print("Speech Recognition ready.")
         self._stream.start()
-        self._state.sr_running = True
+        self.state.sr_running = True
 
-        while True:
-            if not self._state.sr_running:
-                time.sleep(0.2)
-                continue
-
+        while self.state.sr_running:
             chunk, status = self._q_data.get()
             if status:
                 print(status)
@@ -105,8 +96,8 @@ class SpeechRecognition:
                     self._soft_reset_vad()
                 if (time.time() - self._start_time) > MIN_REFRESH_SECS:
                     translation = self._transcriber(self._speech)
-                    if self._result_callback:
-                        self._result_callback(translation)
+                    if self.state.sr_callback:
+                        self.state.sr_callback(translation)
                     self._start_time = time.time()
 
     def stop(self) -> None:
@@ -124,7 +115,7 @@ class SpeechRecognition:
 
     def _end_recording(self) -> None:
         text = self._transcriber(self._speech)
-        if self._result_callback:
-            self._result_callback(text)
+        if self.state.sr_callback:
+            self.state.sr_callback(text)
         self.captions.append(text)
         self._speech *= 0.0

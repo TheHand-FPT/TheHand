@@ -5,12 +5,12 @@ import mediapipe as mp
 from mediapipe.tasks.python import BaseOptions, vision
 
 from thehand.core.configs import NUM_POSE_DETECTED, POSE_LANDMARKER_MODEL
-from thehand.core.types import PoseResultCallback
+from thehand.core.state import State
 
 
 class PoseLandmarker:
-    def __init__(self, result_callback: PoseResultCallback | None = None) -> None:
-        self._result_callback = result_callback
+    def __init__(self, state: State) -> None:
+        self.state = state
 
         base_options = BaseOptions(model_asset_path=POSE_LANDMARKER_MODEL)
         options = vision.PoseLandmarkerOptions(
@@ -26,9 +26,6 @@ class PoseLandmarker:
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
         self._landmarker.detect_async(mp_image, time.time_ns() // 1_000_000)
 
-    def set_result_callback(self, callback: PoseResultCallback) -> None:
-        self._result_callback = callback
-
     def _mediapipe_result_callback(self, result: vision.PoseLandmarkerResult, _, timestamp_ms: int) -> None:
-        if self._result_callback:
-            self._result_callback(result)
+        if self.state.pose_callback:
+            self.state.pose_callback(result)

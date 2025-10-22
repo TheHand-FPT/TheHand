@@ -1,52 +1,45 @@
 import pygame as pg
+
 import thehand as th
 
 
 class CreditScene(th.Scene):
-    def __init__(self, name: str, state: th.State, store: th.Store):
-        super().__init__(name, state, store)
+    def __init__(self, state: th.State, store: th.Store, name: str):
+        super().__init__(state, store, name)
 
     def setup(self):
-        # Màu nền và chữ
         self.bg_color = (20, 20, 20)
         self.text_color = (255, 255, 255)
 
-        # Dòng chữ cảm ơn
         self.lines = [
             "CREDITS",
             "",
-            "Thiết kế & Lập trình: Đội phát triển TheHand",
-            "Developed by:",
-            "  - Nguyễn Thế Anh",
-            "  - Trần Đức Thịnh",
-            "  - Châm Duy Khoát",
-            "  - Hoàng Minh Nhất",
-            "  - Đinh Duy Khương",
+            "A product by TheHand Corporation",
+            "",
+            "Nguyễn Thế Anh",
+            "Trần Đức Thịnh",
+            "Châm Duy Khoát",
+            "Hoàng Minh Nhất",
+            "Đinh Duy Khương",
             "",
             "",
-            "Đặc biệt cảm ơn bạn đã trải nghiệm trò chơi!",
+            "Thank you for playing the game!",
             "",
-            "Nhấn ESC hoặc SPACE để thoát."
+            "Press ESC or SPACE to exit",
         ]
 
-        self.have_setup = True
-
     def handle_events(self):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.done = True
-            elif event.type == pg.KEYDOWN:
+        for event in self.state.events:
+            if event.type == pg.KEYDOWN:
                 if event.key in (pg.K_ESCAPE, pg.K_SPACE):
-                    self.done = True
+                    pg.event.post(th.create_quit_event())
 
     def update(self):
-        # Có thể thêm hiệu ứng di chuyển chữ hoặc nhạc nền nếu muốn
         pass
 
     def render(self):
         self.store.screen.fill(self.bg_color)
 
-        # Draw each line centered horizontally
         y = 150
         for line in self.lines:
             text_surface = self.store.font_text_24.render(line, True, self.text_color)

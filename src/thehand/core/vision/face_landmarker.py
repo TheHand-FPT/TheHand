@@ -9,12 +9,12 @@ from thehand.core.configs import (
     NUM_FACE_DETECTED,
     OUTPUT_FACE_BLENDSHAPES,
 )
-from thehand.core.types import FaceResultCallback
+from thehand.core.state import State
 
 
 class FaceLandmarker:
-    def __init__(self, result_callback: FaceResultCallback | None = None) -> None:
-        self._result_callback = result_callback
+    def __init__(self, state: State) -> None:
+        self.state = state
 
         base_options = BaseOptions(model_asset_path=FACE_LANDMARKER_MODEL)
         options = vision.FaceLandmarkerOptions(
@@ -31,9 +31,6 @@ class FaceLandmarker:
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
         self._landmarker.detect_async(mp_image, time.time_ns() // 1_000_000)
 
-    def set_result_callback(self, callback: FaceResultCallback) -> None:
-        self._result_callback = callback
-
     def _mediapipe_result_callback(self, result: vision.FaceLandmarkerResult, _, timestamp_ms: int) -> None:
-        if self._result_callback:
-            self._result_callback(result)
+        if self.state.face_callback:
+            self.state.face_callback(result)

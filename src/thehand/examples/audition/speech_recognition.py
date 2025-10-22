@@ -13,8 +13,9 @@ def result_callback(text: str):
 
 def main():
     state = th.State()
+    state.set_sr_callback(result_callback)
 
-    sr = th.SpeechRecognition(state, result_callback)
+    sr = th.SpeechRecognition(state)
 
     try:
         sr.run()

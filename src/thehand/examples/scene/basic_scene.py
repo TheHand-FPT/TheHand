@@ -10,7 +10,7 @@ class BasicScene(th.Scene):
         state: th.State,
         store: th.Store,
     ):
-        super().__init__(name, state, store)
+        super().__init__(state, store, name)
 
         self.image = None
         self.image_rect = None
