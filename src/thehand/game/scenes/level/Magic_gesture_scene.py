@@ -112,15 +112,22 @@ class MagicGestureScene(th.Scene):
         # debug
         self._debug = True
         self.done = False
+        # speech subtitle storage
+        self.last_spoken = ""
 
     def _sr_callback(self, text):
-        if not text or not self._game_over:
+        if not text:
             return
+        # always keep last spoken for subtitle display
+        self.last_spoken = text
 
-        if "continue" in text:
-            pg.event.post(th.create_next_scene_event())
-        elif "restart" in text:
-            self.setup()
+        # if game over, allow voice commands to continue/restart
+        if self._game_over:
+            t = text.lower()
+            if "continue" in t:
+                pg.event.post(th.create_next_scene_event())
+            elif "restart" in t:
+                self.setup()
 
     def _load_sound(self, rel: str):
         try:
@@ -327,3 +334,13 @@ class MagicGestureScene(th.Scene):
             tr = small.render("RESTART", True, (255, 255, 255))
             self.screen.blit(tt, tt.get_rect(center=rect_continue.center))
             self.screen.blit(tr, tr.get_rect(center=rect_restart.center))
+
+        # Draw last spoken text as subtitle (bottom center)
+        if getattr(self, "last_spoken", ""):
+            try:
+                subtitle_font = getattr(self.store, "font_text_32", pg.font.SysFont(None, 32))
+                subtitle_surf = subtitle_font.render(self.last_spoken, True, th.COLOR_MOCHA_TEXT)
+                subtitle_rect = subtitle_surf.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() - 60))
+                self.screen.blit(subtitle_surf, subtitle_rect)
+            except Exception:
+                pass
