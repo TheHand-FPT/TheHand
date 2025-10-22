@@ -30,9 +30,9 @@ class MainMenuScene(th.Scene):
         except Exception:
             self.bg_frames = []
 
-        self.game_name = self.store.font_pixel_36.render(GAME_NAME, True, th.COLOR_MOCHA_TEXT)
+        self.game_name = self.store.font_pixel_64.render(GAME_NAME, True, th.COLOR_MOCHA_TEXT)
         self.game_name_rect = self.game_name.get_rect(
-            center=(self.state.window_size[0] // 2, self.state.window_size[1] * 0.3)
+            center=(self.state.window_size[0] // 2, self.state.window_size[1] * 0.25)
         )
 
         # Button setup

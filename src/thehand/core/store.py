@@ -91,6 +91,7 @@ class Store:
         self.font_text_24 = pg.font.Font(asset_path("fonts", "SpaceMono.ttf"), 24)
         self.font_text_18 = pg.font.Font(asset_path("fonts", "SpaceMono.ttf"), 18)
 
+        self.font_pixel_64 = pg.font.Font(asset_path("fonts", "PixeloidSansBold.ttf"), 64)
         self.font_pixel_36 = pg.font.Font(asset_path("fonts", "PixeloidSansBold.ttf"), 36)
         self.font_pixel_24 = pg.font.Font(asset_path("fonts", "PixeloidSansBold.ttf"), 24)
         self.font_pixel_18 = pg.font.Font(asset_path("fonts", "PixeloidSansBold.ttf"), 18)

@@ -100,7 +100,7 @@ class MagicGestureScene(th.Scene):
         # sounds
         self.sound_score = self._load_sound("audio/score.mp3")
         self.sound_hit = self._load_sound("audio/roblox-death.mp3")
-        self.sound_last = self._load_sound("audio/gta-v-death.mp3")
+        self.sound_last = self._load_sound("audio/gta_v_death.mp3")
 
         # visual feedback timers
         self._red_flash_timer = 0.0
@@ -112,6 +112,15 @@ class MagicGestureScene(th.Scene):
         # debug
         self._debug = True
         self.done = False
+
+    def _sr_callback(self, text):
+        if not text or not self._game_over:
+            return
+
+        if "continue" in text:
+            pg.event.post(th.create_next_scene_event())
+        elif "restart" in text:
+            self.setup()
 
     def _load_sound(self, rel: str):
         try:
@@ -208,7 +217,9 @@ class MagicGestureScene(th.Scene):
     def setup(self) -> None:
         # register to receive hand callbacks for scene
         self.state.set_scene_hand_callback(self._on_hand_result)
+        self.state.set_scene_sr_callback(self._sr_callback)
         self.state.hand_running = True
+        self.state.sr_running = True
 
         self._start_time = time.time()
         self._last_spawn = time.time()
@@ -232,7 +243,7 @@ class MagicGestureScene(th.Scene):
                 for name, rect in self._buttons.items():
                     if rect.collidepoint(mx, my):
                         if name == "continue":
-                            self.done = True
+                            pg.event.post(th.create_next_scene_event())
                         elif name == "restart":
                             self.setup()
 

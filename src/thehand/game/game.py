@@ -117,6 +117,7 @@ class TheHandGame:
             self.store.imgs["flying_comets"],
             self.store.sounds["fire_in_the_hole"],
             "Like comets in the sky...",
+            th.COLOR_MOCHA_CRUST,
         )
         self.scene_manager += self.hint_mlrs_scene
 
@@ -130,6 +131,7 @@ class TheHandGame:
             self.store.imgs["majik"],
             self.store.sounds["magic_spells"],
             "The true magic is your hand.",
+            th.COLOR_MOCHA_CRUST,
         )
         self.scene_manager += self.hint_magic_scene
 
@@ -255,8 +257,8 @@ def main():
     game = TheHandGame()
 
     game.state.debug_mode = True
-    game.state.window_size = (1280, 720)
-    game.state.display_flag = pg.SHOWN
+    # game.state.window_size = (1280, 720)
+    # game.state.display_flag = pg.SHOWN
 
     game.init()
     game.run()

@@ -29,14 +29,14 @@ class RpsScene(th.Scene):
         self.player_hand = self.player_imgs["rock"]
         self.player_hand_rect = self.player_hand.get_rect(
             center=(
-                int(self.state.window_size[0] * 0.8),
+                int(self.state.window_size[0] * 0.9),
                 int(self.state.window_size[1] * 0.8),
             )
         )
         self.second_player_hand = self.player_imgs["paper"]
         self.second_player_hand_rect = self.second_player_hand.get_rect(
             center=(
-                int(self.state.window_size[0] * 0.5),
+                int(self.state.window_size[0] * 0.6),
                 int(self.state.window_size[1] * 0.9),
             )
         )
@@ -44,7 +44,7 @@ class RpsScene(th.Scene):
         self.machine_hand = self.player_imgs["rock"]
         self.machine_hand_rect = self.machine_hand.get_rect(
             center=(
-                int(self.state.window_size[0] * 0.2),
+                int(self.state.window_size[0] * 0.1),
                 int(self.state.window_size[1] * 0.2),
             )
         )

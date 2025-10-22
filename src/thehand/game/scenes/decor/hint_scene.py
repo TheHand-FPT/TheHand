@@ -8,17 +8,11 @@ class HintScene(th.Scene):
         self,
         state: th.State,
         store: th.Store,
-<<<<<<< HEAD
-        background_path: Optional[str] = None,
-        hint_text: str = "Hãy sử dụng tay của bạn để di chuyển",
-        text_color: Tuple[int, int, int] = (240, 240, 240),
-=======
         name: str,
         background: pg.Surface | None = None,
         sound: pg.mixer.Sound | None = None,
         text: str = "",
         text_color: tuple[int, int, int] = th.COLOR_MOCHA_TEXT,
->>>>>>> 8e245474d1b534d0444a78fa5ee6f00de5819e13
         align: str = "left",
     ) -> None:
         super().__init__(state, store, name)

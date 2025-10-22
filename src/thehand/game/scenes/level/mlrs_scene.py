@@ -11,7 +11,7 @@ class MlrsScene(NovelScene):
         scripts = {
             "welcome": "Welcome back, Commander.",
             "defeated": "Our frontline forces have been defeated.",
-            "rocket": "But don't worry. Our rocket system are ready to\npushing them back to the held!",
+            "rocket": "But don't worry. Our rocket system are ready to\npushing them back to the hell!",
             "fire": 'You just need to say "FIRE!!!".',
             "easy": "Easy, right?",
             "weldone": "Weldone Commander.",
