@@ -9,5 +9,5 @@ OUTPUT_FACE_BLENDSHAPES = True
 HAND_LANDMARKER_MODEL = "models/hand_landmarker.task"
 NUM_HAND_DETECTED = 2
 
-POSE_LANDMARKER_MODEL = "models/pose_landmarker.task"
+POSE_LANDMARKER_MODEL = "models/pose_landmarker_lite.task"
 NUM_POSE_DETECTED = 1

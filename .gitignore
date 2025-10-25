@@ -5,6 +5,11 @@ build/
 dist/
 wheels/
 *.egg-info
+output
+
+# ML models
+*.onnx
+*.task
 
 # Editors
 .idea

@@ -8,7 +8,7 @@ from sounddevice import InputStream
 
 from thehand.core.state import State
 
-DEFAULT_MODEL = "moonshine/tiny"
+DEFAULT_MODEL = "moonshine/base"
 SAMPLING_RATE = 16000
 CHUNK_SIZE = 512
 LOOKBACK_CHUNKS = 5
@@ -19,7 +19,7 @@ MAX_LINE_LENGTH = 80
 
 class Transcriber:
     def __init__(self, model_name):
-        self.model = MoonshineOnnxModel(model_name=model_name)
+        self.model = MoonshineOnnxModel("models", DEFAULT_MODEL)
         self.rate = SAMPLING_RATE
         self.tokenizer = load_tokenizer()
         self.__call__(np.zeros(self.rate, dtype=np.float32))
