@@ -1,3 +1,5 @@
+import time
+
 import pygame as pg
 
 from thehand.core.state import State
@@ -16,6 +18,11 @@ class SceneManager:
         self._current_scene: Scene | None = None
 
     def __call__(self) -> None:
+        if not self._current_scene:
+            print("Current scene empty")
+            time.sleep(0.2)
+            return
+
         if not self._current_scene._have_setup:
             self._current_scene._setup()
         self._current_scene.handle_events()
