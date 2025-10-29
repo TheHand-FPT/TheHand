@@ -4,6 +4,18 @@
 
 **\[GAME_NOT_FOUND\!\]** is an action and fighting 2D Platformer game made by the **TheHand** team. The core idea is simple: **You don't need a keyboard or mouse\!** You control the character using only your **body movements, voice, and face expressions.** This creates a super fun and healthy way to play, turning your real-life actions into game moves.
 
+## Showcases ✨
+
+### Pacman ╰(*°▽°*)╯  
+![Pacman](docs/pacman.gif)
+
+### Rock🪨 - Paper📃 - Scissor✂️  
+![Rock Paper Scissor](docs/rock-paper-scissor.gif)
+
+### Magic Gesture 🪄🔮
+![Magic Gesture](docs/magic-gesture.gif)  
+![Magic Gesture preview](docs/magic-gesture-preview.jpg)
+
 ## Core Concept: Natural Reaction
 
 The game uses your **Camera and Microphone** for all interactions, challenging your natural reflexes:
